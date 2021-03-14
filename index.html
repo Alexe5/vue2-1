@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue.js HW 2-2</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+    <style>
+        body {
+            font-family: monospace;
+            font-size: 16px;
+            background-color: #0a0a0a;
+            color: #006400;
+            margin: 0;
+        }
+
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            margin: 0 0 50px 0;
+        }
+
+        ul {
+            margin: 5px 0;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        pre {
+            font-size: 12px;
+        }
+
+        .hr {
+            height: 1px;
+            background-color: #006400;
+            margin: 50px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <h2>Задание:</h2>
+    <p>Форма должна содержать следующие поля:</p>
+    <ul>
+        <li>Name</li>
+        <li>Phone</li>
+        <li>Email</li>
+        <li>Some field 1</li>
+        <li>Some field 2</li>
+    </ul>
+    <p>Должен быть индикатор выполнения, который реагирует на корректное заполнение вышеуказанных полей.</p>
+    <p>Корректное заполнение каждого поля добавляет 20% в индикаторе выполнения.</p>
+    <p>Для каждого поля должна быть реализована проверка на корректное заполнение. При некорректном вводе появляется иконка с подходящим изображением. Это должно быть реализовано путем добавления класса. Если поле заполнено корректно, то должна появляться иконка с подходящим изображением.</p>
+    <p>Изначально, когда поля еще пустые, иконки быть не должно.</p>
+    <p>Использовать в работе указанный ниже массив.</p>
+    <pre>
+        info: [
+            {
+                name: 'Name',
+                value: '',
+                pattern: /^[a-zA-Z ]{2,30}$/
+            },
+            {
+                name: 'Phone',
+                value: '',
+                pattern: /^[0-9]{7,14}$/
+            },
+            {
+                name: 'Email',
+                value: '',
+                pattern: /.+/
+            },
+            {
+                name: 'Some Field 1',
+                value: '',
+                pattern: /.+/
+            },
+            {
+                name: 'Some Field 2',
+                value: '',
+                pattern: /.+/
+            }
+        ]
+    </pre>
+    <p>Ниже должна быть кнопка "Summary data", которая находится в неактивном состоянии до корректного заполнения всех полей.</p>
+    <p>После нажатия появляется второй экран, на котором отображается сводная информация по полям.</p>
+    <div class="hr"></div>
+
+    <h2>Решение:</h2>
+
+    <div id="app">
+
+        <div class="content">
+
+            <form class="form"
+
+            >
+                <div class="form__item">
+                    <input type="checkbox"
+                           id="form__checkbox1"
+                    >
+                    <label for="form__checkbox1">I agree this text</label>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let app = new Vue({
+        el: '#app',
+        data: {
+
+        },
+        methods: {
+
+        }
+    });
+</script>
+</body>
+</html>

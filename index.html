@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Vue.js HW 2-2</title>
+    <title>Vue.js HW 2-1</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
     <style>
@@ -61,14 +61,44 @@
             padding: 0;
         }
 
+        .form__item {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .form__item:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            transform: translate(0, -50%);
+            width: 20px;
+            height: 20px;
+            font-size: 22px;
+            line-height: 1;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .form__item.verified:before {
+            content: '\2713';
+        }
+
+        .form__item.error:before {
+            content: '\2717';
+            color: red;
+        }
+
         .form__field {
+            width: 175px;
             background-color: #99b500;
             color: #006400;
             font-family: monospace;
             font-size: 16px;
             border: 0;
             outline: none;
-            padding: 10px;
+            padding: 10px 30px 10px 10px;
             box-sizing: border-box;
         }
 
@@ -114,18 +144,16 @@
         <li>Some field 1</li>
         <li>Some field 2</li>
     </ul>
-    <p>Для каждого поля должна быть реализована проверка на корректное заполнение. При некорректном вводе появляется иконка с подходящим изображением. Это должно быть реализовано путем добавления класса. Если поле заполнено корректно, то должна появляться иконка с подходящим изображением.</p>
-    <p>Должен быть индикатор выполнения, который реагирует на корректное заполнение вышеуказанных полей.</p>
-    <p>Корректное заполнение каждого поля добавляет 20% в индикаторе выполнения.</p>
+    <p>Для каждого поля должна быть реализована проверка на корректное заполнение. При некорректном вводе появляется иконка с подходящим изображением. Если поле заполнено корректно, то должна появляться другая иконка с подходящим изображением. Это должно быть реализовано путем добавления класса.</p>
     <p>Изначально, когда поля еще пустые, иконки быть не должно.</p>
-    <p>Использовать в работе указанный ниже массив.</p>
+    <p>Использовать для проверки полей указанный ниже массив.</p>
     <details>
         <pre>
             info: [
                 {
                     name: 'Name',
                     value: '',
-                    pattern: /^[a-zA-Z ]{2,30}$/
+                    pattern: /^[a-zA-Z]{2,30}$/
                 },
                 {
                     name: 'Phone',
@@ -150,6 +178,8 @@
             ]
         </pre>
     </details>
+    <p>Должен быть индикатор выполнения, который реагирует на корректное заполнение вышеуказанных полей.</p>
+    <p>Корректное заполнение каждого поля добавляет 20% в индикаторе выполнения.</p>
     <p>Ниже должна быть кнопка "Summary data", которая находится в неактивном состоянии до корректного заполнения всех полей.</p>
     <p>После нажатия появляется второй экран, на котором отображается сводная информация по полям.</p>
     <div class="hr"></div>
@@ -168,24 +198,26 @@
             <form class="form"
 
             >
-                <div class="form__item">
-                    <label for="form__name"></label>
-                    <input type="text" class="form__field" placeholder="Name" id="form__name">
+                <div class="form__item" v-bind:class="nameClass()">
+                    <label for="form__name" class="form__label"></label>
+                    <input type="text" class="form__field" placeholder="Name" id="form__name"
+                                v-on:input="nameHandler($event)"
+                    >
                 </div>
                 <div class="form__item">
-                    <label for="form__phone"></label>
+                    <label for="form__phone" class="form__label"></label>
                     <input type="text" class="form__field" placeholder="Phone" id="form__phone">
                 </div>
                 <div class="form__item">
-                    <label for="form__email"></label>
+                    <label for="form__email" class="form__label"></label>
                     <input type="text" class="form__field" placeholder="Email" id="form__email">
                 </div>
                 <div class="form__item">
-                    <label for="form__sf1"></label>
+                    <label for="form__sf1" class="form__label"></label>
                     <input type="text" class="form__field" placeholder="Some field 1" id="form__sf1">
                 </div>
                 <div class="form__item">
-                    <label for="form__sf2"></label>
+                    <label for="form__sf2" class="form__label"></label>
                     <input type="text" class="form__field" placeholder="Some field 2" id="form__sf2">
                 </div>
             </form>
@@ -199,10 +231,72 @@
     let app = new Vue({
         el: '#app',
         data: {
-
+            name: '',
+            info: [
+                {
+                    name: 'Name',
+                    value: '',
+                    pattern: /^[a-zA-Z]{2,30}$/
+                },
+                {
+                    name: 'Phone',
+                    value: '',
+                    pattern: /^[0-9]{7,14}$/
+                },
+                {
+                    name: 'Email',
+                    value: '',
+                    pattern: /.+/
+                },
+                {
+                    name: 'Some Field 1',
+                    value: '',
+                    pattern: /.+/
+                },
+                {
+                    name: 'Some Field 2',
+                    value: '',
+                    pattern: /.+/
+                }
+            ]
         },
         methods: {
+            nameHandler(e){
+                // let index = '';
 
+                // if ( e.target.placeholder === 'Name' ) {
+                //     let index = 0;
+                // } else if ( e.target.placeholder === 'Phone' ) {
+                //     let index = 1;
+                // } else if ( e.target.placeholder === 'Email' ) {
+                //     let index = 2;
+                // } else if ( e.target.placeholder === 'Some field 1' ) {
+                //     let index = 3;
+                // } else {
+                //     let index = 4;
+                // }
+
+                // console.log(e.target.placeholder);
+
+                if ( this.info[0].pattern.test(e.target.value) ) {
+                    this.name = e.target.value;
+                } else {
+                    this.name = false;
+                }
+            },
+            nameClass(){
+                if ( this.name === '' ) {
+                    return '';
+                } else if ( this.name ) {
+                    return 'verified';
+                } else {
+                    return 'error';
+                }
+            }
+        },
+        updated() {
+            let currentHeight = document.body.offsetHeight;
+            window.scrollTo(0, currentHeight);
         }
     });
 </script>

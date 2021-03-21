@@ -59,16 +59,36 @@
         }
 
         .form {
-            display: flex;
-            justify-content: space-between;
             margin: 0;
             padding: 0;
+        }
+
+        .form__items {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media only screen and (max-width: 1023px) {
+            .form__items {
+                flex-direction: column;
+                align-items: center;
+            }
         }
 
         .form__item {
             display: flex;
             flex-direction: column;
             position: relative;
+        }
+
+        @media only screen and (max-width: 1023px) {
+            .form__item {
+                margin: 0 0 15px 0;
+            }
+
+            .form__item:last-child {
+                margin: 0;
+            }
         }
 
         .form__item:before {
@@ -106,8 +126,52 @@
             box-sizing: border-box;
         }
 
+        @media only screen and (max-width: 1023px) {
+            .form__field {
+                width: 100%;
+            }
+        }
+
         .form__field::placeholder {
             color: #006400;
+        }
+
+        .form__submit-btn {
+            display: block;
+            min-width: 100px;
+            margin: 50px 0 0 0;
+            padding: 10px;
+            border: none;
+            color: #99b500;
+            background-color: #006400;
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .3s;
+            outline: none;
+        }
+
+        @media only screen and (max-width: 1023px) {
+            .form__submit-btn {
+                margin: 50px auto 0;
+            }
+        }
+
+        .form__submit-btn:hover {
+            color: #006400;
+            background-color: #99b500;
+        }
+
+        .form__submit-btn:disabled {
+            color: #444444;
+            background-color: #212121;
+            cursor: no-drop;
+        }
+
+        .form__submit-btn:disabled:hover {
+            color: #444444;
+            background-color: #212121;
         }
 
         .progress-bar {
@@ -191,7 +255,7 @@
 
     <div id="app">
 
-        <div class="content">
+        <div class="content" v-if="firstScreen">
 
             <div class="progress-bar">
                 <div class="progress-bar__line"
@@ -205,40 +269,57 @@
             </div>
 
             <form class="form"
-
+                  v-on:submit.prevent="submitHandler()"
             >
-                <div class="form__item" v-bind:class="nameClass()">
-                    <label for="form__name" class="form__label"></label>
-                    <input type="text" class="form__field" placeholder="Name" id="form__name"
-                                v-on:input="nameHandler($event)"
-                    >
+                <div class="form__items">
+                    <div class="form__item" v-bind:class="nameClass()">
+                        <label for="form__name" class="form__label"></label>
+                        <input type="text" class="form__field" placeholder="Name" id="form__name"
+                               v-on:input="nameHandler($event)"
+                        >
+                    </div>
+                    <div class="form__item" v-bind:class="phoneClass()">
+                        <label for="form__phone" class="form__label"></label>
+                        <input type="text" class="form__field" placeholder="Phone" id="form__phone"
+                               v-on:input="phoneHandler($event)"
+                        >
+                    </div>
+                    <div class="form__item" v-bind:class="emailClass()">
+                        <label for="form__email" class="form__label"></label>
+                        <input type="text" class="form__field" placeholder="Email" id="form__email"
+                               v-on:input="emailHandler($event)"
+                        >
+                    </div>
+                    <div class="form__item" v-bind:class="sf1Class()">
+                        <label for="form__sf1" class="form__label"></label>
+                        <input type="text" class="form__field" placeholder="Some field 1" id="form__sf1"
+                               v-on:input="sf1Handler($event)"
+                        >
+                    </div>
+                    <div class="form__item" v-bind:class="sf2Class()">
+                        <label for="form__sf2" class="form__label"></label>
+                        <input type="text" class="form__field" placeholder="Some field 2" id="form__sf2"
+                               v-on:input="sf2Handler($event)"
+                        >
+                    </div>
                 </div>
-                <div class="form__item" v-bind:class="phoneClass()">
-                    <label for="form__phone" class="form__label"></label>
-                    <input type="text" class="form__field" placeholder="Phone" id="form__phone"
-                           v-on:input="phoneHandler($event)"
-                    >
-                </div>
-                <div class="form__item" v-bind:class="emailClass()">
-                    <label for="form__email" class="form__label"></label>
-                    <input type="text" class="form__field" placeholder="Email" id="form__email"
-                           v-on:input="emailHandler($event)"
-                    >
-                </div>
-                <div class="form__item" v-bind:class="sf1Class()">
-                    <label for="form__sf1" class="form__label"></label>
-                    <input type="text" class="form__field" placeholder="Some field 1" id="form__sf1"
-                           v-on:input="sf1Handler($event)"
-                    >
-                </div>
-                <div class="form__item" v-bind:class="sf2Class()">
-                    <label for="form__sf2" class="form__label"></label>
-                    <input type="text" class="form__field" placeholder="Some field 2" id="form__sf2"
-                           v-on:input="sf2Handler($event)"
-                    >
-                </div>
+                <button type="submit" class="form__submit-btn"
+                        v-bind:disabled="!submitButton"
+                >
+                    Summary data
+                </button>
             </form>
 
+        </div>
+
+        <div class="summary"
+             v-else
+        >
+            <p>Name: {{ name }}</p>
+            <p>Phone: {{ phone }}</p>
+            <p>Email: {{ email }}</p>
+            <p>Some field 1: {{ sf1 }}</p>
+            <p>Some field 2: {{ sf2 }}</p>
         </div>
 
     </div>
@@ -260,6 +341,7 @@
             progressBarSf2: 0,
             progressBarSum: 0,
             submitButton: false,
+            firstScreen: true,
             info: [
                 {
                     name: 'Name',
@@ -374,6 +456,9 @@
                 } else {
                     return 'error';
                 }
+            },
+            submitHandler(){
+                this.firstScreen = false;
             }
         },
         computed: {
@@ -382,6 +467,8 @@
 
                 if ( this.progressBarSum === 100 ) {
                     this.submitButton = true;
+                } else {
+                    this.submitButton = false;
                 }
 
                 return {

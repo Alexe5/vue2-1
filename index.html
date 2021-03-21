@@ -9,6 +9,10 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: monospace;
             font-size: 16px;
@@ -117,7 +121,6 @@
         }
 
         .progress-bar__line {
-            width: 0;
             height: 100%;
             background-color: #006400;
             transition: 1s;
@@ -191,8 +194,14 @@
         <div class="content">
 
             <div class="progress-bar">
-                <div class="progress-bar__line"></div>
-                <span class="progress-bar__text">55%</span>
+                <div class="progress-bar__line"
+                     v-bind:style="progressBarWidth"
+                >
+
+                </div>
+                <span class="progress-bar__text">
+                    {{ progressBarSum }}%
+                </span>
             </div>
 
             <form class="form"
@@ -204,21 +213,29 @@
                                 v-on:input="nameHandler($event)"
                     >
                 </div>
-                <div class="form__item">
+                <div class="form__item" v-bind:class="phoneClass()">
                     <label for="form__phone" class="form__label"></label>
-                    <input type="text" class="form__field" placeholder="Phone" id="form__phone">
+                    <input type="text" class="form__field" placeholder="Phone" id="form__phone"
+                           v-on:input="phoneHandler($event)"
+                    >
                 </div>
-                <div class="form__item">
+                <div class="form__item" v-bind:class="emailClass()">
                     <label for="form__email" class="form__label"></label>
-                    <input type="text" class="form__field" placeholder="Email" id="form__email">
+                    <input type="text" class="form__field" placeholder="Email" id="form__email"
+                           v-on:input="emailHandler($event)"
+                    >
                 </div>
-                <div class="form__item">
+                <div class="form__item" v-bind:class="sf1Class()">
                     <label for="form__sf1" class="form__label"></label>
-                    <input type="text" class="form__field" placeholder="Some field 1" id="form__sf1">
+                    <input type="text" class="form__field" placeholder="Some field 1" id="form__sf1"
+                           v-on:input="sf1Handler($event)"
+                    >
                 </div>
-                <div class="form__item">
+                <div class="form__item" v-bind:class="sf2Class()">
                     <label for="form__sf2" class="form__label"></label>
-                    <input type="text" class="form__field" placeholder="Some field 2" id="form__sf2">
+                    <input type="text" class="form__field" placeholder="Some field 2" id="form__sf2"
+                           v-on:input="sf2Handler($event)"
+                    >
                 </div>
             </form>
 
@@ -232,6 +249,17 @@
         el: '#app',
         data: {
             name: '',
+            phone: '',
+            email: '',
+            sf1: '',
+            sf2: '',
+            progressBarName: 0,
+            progressBarPhone: 0,
+            progressBarEmail: 0,
+            progressBarSf1: 0,
+            progressBarSf2: 0,
+            progressBarSum: 0,
+            submitButton: false,
             info: [
                 {
                     name: 'Name',
@@ -262,26 +290,12 @@
         },
         methods: {
             nameHandler(e){
-                // let index = '';
-
-                // if ( e.target.placeholder === 'Name' ) {
-                //     let index = 0;
-                // } else if ( e.target.placeholder === 'Phone' ) {
-                //     let index = 1;
-                // } else if ( e.target.placeholder === 'Email' ) {
-                //     let index = 2;
-                // } else if ( e.target.placeholder === 'Some field 1' ) {
-                //     let index = 3;
-                // } else {
-                //     let index = 4;
-                // }
-
-                // console.log(e.target.placeholder);
-
                 if ( this.info[0].pattern.test(e.target.value) ) {
                     this.name = e.target.value;
+                    this.progressBarName = 20;
                 } else {
                     this.name = false;
+                    this.progressBarName = 0;
                 }
             },
             nameClass(){
@@ -292,6 +306,87 @@
                 } else {
                     return 'error';
                 }
+            },phoneHandler(e){
+                if ( this.info[1].pattern.test(e.target.value) ) {
+                    this.phone = e.target.value;
+                    this.progressBarPhone = 20;
+                } else {
+                    this.phone = false;
+                    this.progressBarPhone = 0;
+                }
+            },
+            phoneClass(){
+                if ( this.phone === '' ) {
+                    return '';
+                } else if ( this.phone ) {
+                    return 'verified';
+                } else {
+                    return 'error';
+                }
+            },emailHandler(e){
+                if ( this.info[2].pattern.test(e.target.value) ) {
+                    this.email = e.target.value;
+                    this.progressBarEmail = 20;
+                } else {
+                    this.email = false;
+                    this.progressBarEmail = 0;
+                }
+            },
+            emailClass(){
+                if ( this.email === '' ) {
+                    return '';
+                } else if ( this.email ) {
+                    return 'verified';
+                } else {
+                    return 'error';
+                }
+            },sf1Handler(e){
+                if ( this.info[3].pattern.test(e.target.value) ) {
+                    this.sf1 = e.target.value;
+                    this.progressBarSf1 = 20;
+                } else {
+                    this.sf1 = false;
+                    this.progressBarSf1 = 0;
+                }
+            },
+            sf1Class(){
+                if ( this.sf1 === '' ) {
+                    return '';
+                } else if ( this.sf1 ) {
+                    return 'verified';
+                } else {
+                    return 'error';
+                }
+            },sf2Handler(e){
+                if ( this.info[4].pattern.test(e.target.value) ) {
+                    this.sf2 = e.target.value;
+                    this.progressBarSf2 = 20;
+                } else {
+                    this.sf2 = false;
+                    this.progressBarSf2 = 0;
+                }
+            },
+            sf2Class(){
+                if ( this.sf2 === '' ) {
+                    return '';
+                } else if ( this.sf2 ) {
+                    return 'verified';
+                } else {
+                    return 'error';
+                }
+            }
+        },
+        computed: {
+            progressBarWidth(){
+                this.progressBarSum = this.progressBarName + this.progressBarPhone + this.progressBarEmail + this.progressBarSf1 + this.progressBarSf2;
+
+                if ( this.progressBarSum === 100 ) {
+                    this.submitButton = true;
+                }
+
+                return {
+                    width: this.progressBarSum + '%'
+                };
             }
         },
         updated() {
